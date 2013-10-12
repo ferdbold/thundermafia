@@ -4,19 +4,15 @@ using System.Collections;
 public class Deplacement : MonoBehaviour {
 	// Vitesse du vaisseau
 	public float decay = 0.99f;
-	public float speed = 20;
+	public float speed = 0.001f;
 	public float maxSpeed = 10;
 	
 	// Position max du vaisseau
-	public float radiusArene = 5;
-	public float playerPosVMin   = -10.0f;
-	public float playerPosVMax   = 10.0f;
-	public float playerPosHMin   = -10.0f;
-	public float playerPosHMax   = 10.0f;
+	public float radiusArene = 10;
 	
 	// Position de départ
 	public float playerPosHStart = 0f;
-	public float playerPosVStart = -4.5f;
+	public float playerPosVStart = 0f;
 	
 	// Vecteur de vélocité
 	public Vector3 dir = Vector3.zero;
@@ -37,8 +33,8 @@ public class Deplacement : MonoBehaviour {
 			dir = Vector3.ClampMagnitude(dir, 1);
 		}
 		
-		velocity.x = dir.x * speed * Time.deltaTime;
-		velocity.y = dir.y * speed * Time.deltaTime;
+		velocity.x += dir.x * speed * Time.deltaTime;
+		velocity.y += dir.y * speed * Time.deltaTime;
 		velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
 		velocity *= decay;
 		
