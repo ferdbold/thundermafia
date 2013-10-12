@@ -11,4 +11,5 @@ builds
 *.pidb
 *.unityproj
 Assets/Scenes
+*.userprefs
 
