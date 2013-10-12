@@ -1,8 +1,8 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Spawner.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Standard Assets (Mobile)/Shaders/Particle Shaders/Mobile Multiply Culled.shader">
     <Files>
-      <File FileName="Assets/Spawner.cs" Line="9" Column="2" />
+      <File FileName="Assets/Standard Assets (Mobile)/Shaders/Particle Shaders/Mobile Multiply Culled.shader" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
