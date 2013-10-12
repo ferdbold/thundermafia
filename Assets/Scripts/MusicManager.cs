@@ -7,7 +7,6 @@ public class MusicManager : MonoBehaviour {
 	public AudioClip bossMusic;
 	
 	private GameManager game;
-	private UIManager ui;
 	private MusicManagerState _state;
 	
 	private float _timeSinceLastMusicTick;
@@ -22,7 +21,6 @@ public class MusicManager : MonoBehaviour {
 	void Start() {
 		_state = new NormalMusicState(this);
 		game = GameObject.Find("GameManager").GetComponent<GameManager>();
-		ui = GameObject.Find("UIManager").GetComponent<UIManager>();
 	}
 	
 	void Update () {
@@ -37,20 +35,17 @@ public class MusicManager : MonoBehaviour {
 		}
 		
 		virtual public void Update() {
-			// Synchronisation avec musique
-			float nextTick = 240 / _manager.bpm;
-			float lengthAnimation = nextTick * (1 - _manager._animStartPercentage);
-			float minThreshold = nextTick * _manager._animStartPercentage;
-			float deltaAnimation = Mathf.Min(_manager._timeSinceLastMusicTick - minThreshold, lengthAnimation);
-			float progressRatio = _manager._timeSinceLastMusicTick / nextTick;
-			float animRatio = deltaAnimation / lengthAnimation;
-			
-			_manager._timeSinceLastMusicTick += Time.deltaTime;
-			_manager.ui.tempo.progress = progressRatio;
-			
 			// Transition des anneaux à chaque mesure
+			float nextTick = 240 / _manager.bpm;
+			_manager._timeSinceLastMusicTick += Time.deltaTime;
+			
+			float minThreshold = nextTick * _manager._animStartPercentage;
 			if (_manager._timeSinceLastMusicTick >= minThreshold) {
-				_manager.game.OnRingChange(animRatio);
+				float lengthAnimation = nextTick * (1 - _manager._animStartPercentage);
+				float deltaAnimation = Mathf.Min(_manager._timeSinceLastMusicTick - minThreshold, lengthAnimation);
+				
+				_manager.game.OnRingChange(deltaAnimation / lengthAnimation);
+				Debug.Log(deltaAnimation / lengthAnimation);
 				
 				if (_manager._timeSinceLastMusicTick >= nextTick) {
 					_manager._timeSinceLastMusicTick = 0;	

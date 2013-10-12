@@ -66,14 +66,11 @@ public class GameManager : MonoBehaviour {
 	
 	private class RingChangeGameManagerState : GameManagerState {
 		public RingChangeGameManagerState(GameManager manager) : base(manager) {
-			
+				
 		}
 		
 		override public void OnRingChange(float ratio) {
 			_manager.player.transform.position = Vector3.Lerp(_manager.player.transform.position, _manager.player.transform.position + new Vector3(0, 0, _manager._ringJump/16), ratio);
-			if (ratio == 1) {
-				_manager._state = new IdleGameManagerState(_manager);
-			}
 		}
 	}		
 }
