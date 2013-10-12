@@ -1,12 +1,11 @@
-﻿#pragma strict
-
-var tailleEntrer : float = 45;
-var tailleSortie : float = 100;
+﻿var curseur : Texture2D;
  
-function OnMouseEnter() {
-    guiText.fontSize = tailleEntrer;
+function Start() {
+    Screen.showCursor = false; 
 }
  
-function OnMouseExit() {
-    guiText.fontSize = tailleSortie;
+function OnGUI() {
+    var positionSouris : Vector3 = Input.mousePosition;
+    var positionCurseur : Rect = Rect(positionSouris.x,Screen.height - positionSouris.y,curseur.width,curseur.height);
+    GUI.Label(positionCurseur,curseur);
 }
