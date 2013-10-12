@@ -1,5 +1,6 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+<<<<<<< HEAD
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/AfficherScore.js">
     <Files>
       <File FileName="Assets/SéléctionText.js" Line="8" Column="2" />
@@ -8,6 +9,9 @@
       <File FileName="Assets/AfficherScore.js" Line="10" Column="38" />
     </Files>
   </MonoDevelop.Ide.Workbench>
+=======
+  <MonoDevelop.Ide.Workbench />
+>>>>>>> bd853929b70ef3cac7f3238f8be283c2335812b8
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
