@@ -18,7 +18,7 @@ public class GameInfo : MonoBehaviour
 			return player.transform.position;
 		}
 		
-		throw new System.Exception("No player detected!");
+		throw new System.Exception ("No player detected!");
 	}
 	
 	/// <summary>
@@ -34,23 +34,9 @@ public class GameInfo : MonoBehaviour
 	{
 		Vector3 vec1, vec2;
 		vec1 = GetPlayerLocation ();
-		vec1.y = 0;
+		vec1.z = 0;
 		vec2 = point;
-		vec2.y = 0;
+		vec2.z = 0;
 		return Vector3.Distance (vec2, vec1);
-	}
-	
-	/// <summary>
-	/// Gets the angle between player and a point.
-	/// </summary>
-	/// <returns>
-	/// The angle between player and point.
-	/// </returns>
-	/// <param name='point'>
-	/// Point.
-	/// </param>
-	public static float GetAngleBetweenPlayerAndPoint(Vector3 point)
-	{
-		return Vector3.Angle (point, GetPlayerLocation ());
-	}
+	}	
 }
