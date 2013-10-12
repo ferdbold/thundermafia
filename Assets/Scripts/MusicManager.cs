@@ -9,6 +9,12 @@ public class MusicManager : MonoBehaviour {
 	private MusicManagerState _state;
 	private bool _transitioning;
 	
+	private float _bpm;
+	public float bpm {
+		get { return _bpm; }
+		set { _bpm = value; }
+	}
+	
 	void Start() {
 		_state = new NormalMusicState(this);	
 	}
@@ -21,7 +27,7 @@ public class MusicManager : MonoBehaviour {
 		protected MusicManager _manager;
 		
 		public MusicManagerState(MusicManager manager) {
-			_manager = manager;		
+			_manager = manager;
 		}
 		
 		abstract public void Update();
@@ -31,6 +37,7 @@ public class MusicManager : MonoBehaviour {
 		public NormalMusicState(MusicManager manager) : base(manager) {
 			_manager.audio.clip = _manager.mainMusic;
 			_manager.audio.Play();
+			_manager.bpm = 87.5f;
 		}	
 		
 		override public void Update() {
@@ -44,6 +51,7 @@ public class MusicManager : MonoBehaviour {
 		public IntroBossMusicManagerState(MusicManager manager) : base(manager) {
 			_manager.audio.clip = _manager.introBossMusic;
 			_manager.audio.Play();
+			_manager.bpm = 0;
 		}
 		
 		override public void Update() {
@@ -57,6 +65,7 @@ public class MusicManager : MonoBehaviour {
 		public BossMusicManagerState(MusicManager manager) : base(manager) {
 			_manager.audio.clip = _manager.bossMusic;
 			_manager.audio.Play();
+			_manager.bpm = 290;
 		}
 		
 		override public void Update() {
