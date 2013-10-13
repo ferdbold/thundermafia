@@ -8,6 +8,7 @@ public class MusicManager : MonoBehaviour {
 	
 	private GameManager game;
 	private UIManager ui;
+	private Light flareLight;
 	private MusicManagerState _state;
 	
 	private float _timeSinceLastMusicTick;
@@ -20,7 +21,9 @@ public class MusicManager : MonoBehaviour {
 	}
 	
 	void Start() {
+		flareLight = GameObject.Find("FlareSpot").GetComponent<Light>();
 		_state = new NormalMusicState(this);
+		
 		game = GameObject.Find("GameManager").GetComponent<GameManager>();
 		ui = GameObject.Find("UIManager").GetComponent<UIManager>();
 	}
@@ -31,16 +34,22 @@ public class MusicManager : MonoBehaviour {
 	
 	abstract private class MusicManagerState {
 		protected MusicManager _manager;
+		private int sampleCountBuffer = 0;
+		protected bool scoreUp;
+		protected Color origColor;
 		
 		public MusicManagerState(MusicManager manager) {
 			_manager = manager;
+			origColor = _manager.flareLight.color;
 		}
 		
 		virtual public void Update() {
 			// Transition des anneaux à chaque mesure
-			_manager._timeSinceLastMusicTick += Time.deltaTime;
 			
-			float nextTick = 240 / _manager.bpm;
+			_manager._timeSinceLastMusicTick += _manager.audio.timeSamples - sampleCountBuffer;
+			sampleCountBuffer = _manager.audio.timeSamples;
+			
+			float nextTick = 240 * 44100 / _manager.bpm;
 			float lengthAnimation = nextTick * (1 - _manager._animStartPercentage);
 			float minThreshold = nextTick * _manager._animStartPercentage;
 			float deltaAnimation = Mathf.Min(_manager._timeSinceLastMusicTick - minThreshold, lengthAnimation);
@@ -53,16 +62,20 @@ public class MusicManager : MonoBehaviour {
 			
 			// Détection du changement de cercles
 			if (_manager._timeSinceLastMusicTick >= minThreshold) {	
-				_manager.game.OnRingChange(ratioAnimation);
+				_manager.game.OnRingChange(ratioAnimation, scoreUp);
+				Debug.Log(scoreUp);
 				
 				if (_manager._timeSinceLastMusicTick >= nextTick) {
 					_manager._timeSinceLastMusicTick = 0;	
 				}
-			}	
+			}
 		}
 	}
 	
 	private class NormalMusicState : MusicManagerState {
+		private float transition = 0;
+		private float animLength = 1;
+		
 		public NormalMusicState(MusicManager manager) : base(manager) {
 			_manager.audio.clip = _manager.mainMusic;
 			_manager.audio.Play();
@@ -71,14 +84,23 @@ public class MusicManager : MonoBehaviour {
 		}	
 		
 		override public void Update() {
+			scoreUp = true;
 			base.Update();
+			
+			transition += Time.deltaTime;
+			_manager.flareLight.color = Color.Lerp(origColor, Color.blue, transition / animLength);
+			
 			if (Input.GetKey(KeyCode.Return)) {
+				_manager._timeSinceLastMusicTick = 0;
 				_manager._state = new IntroBossMusicManagerState(_manager);
 			}
 		}
 	}
 	
 	private class IntroBossMusicManagerState : MusicManagerState {
+		private float transition = 0;
+		private float animLength = 5;
+		
 		public IntroBossMusicManagerState(MusicManager manager) : base(manager) {
 			_manager.audio.clip = _manager.introBossMusic;
 			_manager.audio.Play();
@@ -86,6 +108,12 @@ public class MusicManager : MonoBehaviour {
 		}
 		
 		override public void Update() {
+			scoreUp = false;
+			base.Update();
+			
+			transition += Time.deltaTime;
+			_manager.flareLight.color = Color.Lerp(origColor, Color.red, transition / animLength);
+			
 			if (!_manager.audio.isPlaying) {
 				_manager._state = new BossMusicManagerState(_manager);	
 			}
@@ -101,8 +129,10 @@ public class MusicManager : MonoBehaviour {
 		}
 		
 		override public void Update() {
+			scoreUp = false;
 			base.Update();
-			if (Input.GetKey(KeyCode.Return)) {
+			if (Input.GetKey(KeyCode.Backspace)) {
+				_manager._timeSinceLastMusicTick = 0;
 				_manager._state = new NormalMusicState(_manager);	
 			}
 		}

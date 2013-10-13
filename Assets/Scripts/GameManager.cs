@@ -43,8 +43,8 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 	
-	public void OnRingChange(float ratio) {
-		_state.OnRingChange(ratio);
+	public void OnRingChange(float ratio, bool levelUp) {
+		_state.OnRingChange(ratio, levelUp);
 	}
 	
 	public void AddToGoal(float amount) {
@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour {
 		}
 		
 		virtual public void Update() {}
-		virtual public void OnRingChange(float ratio) {}
+		virtual public void OnRingChange(float ratio, bool levelUp) {}
 	}
 	
 	private class IdleGameManagerState : GameManagerState {
@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour {
 			
 		}
 		
-		override public void OnRingChange(float ratio) {
+		override public void OnRingChange(float ratio, bool levelUp) {
 			_manager._state = new RingChangeGameManagerState(_manager);	
 		}
 	}
@@ -85,13 +85,13 @@ public class GameManager : MonoBehaviour {
 			origPosition = _manager.playerController.transform.position;
 		}
 		
-		override public void OnRingChange(float ratio) {
+		override public void OnRingChange(float ratio, bool scoreUp) {
 			_manager.playerController.transform.position = Vector3.Lerp(origPosition, origPosition + new Vector3(0, 0, _manager._ringJump), ratio);
 			
 			if (ratio >= 1) {
 				CheckForSuccess();
 				EnemySpawner.canSpawnEnemy=true; // Dit au EnemySpawner qu'il peut créer de nouveaux ennemis
-				LevelUp();
+				LevelUp(scoreUp);
 				_manager._state = new IdleGameManagerState(_manager);
 			}
 		}
@@ -102,10 +102,10 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 		
-		private void LevelUp() {
+		private void LevelUp(bool scoreUp) {
 			_manager.SetGoal(0);
-			_manager.score++;
-			//_manager.ui.score.amount = _manager.score;
+			if (scoreUp) _manager.score++;
+			_manager.ui.score.amount = _manager.score;
 		}
 	}
 }
