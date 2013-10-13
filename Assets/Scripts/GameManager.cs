@@ -97,6 +97,7 @@ public class GameManager : MonoBehaviour {
 			
 			if (ratio >= 1) {
 				CheckForSuccess();
+				EnemySpawner.canSpawnEnemy=true; // Dit au EnemySpawner qu'il peut créer de nouveaux ennemis
 				LevelUp(scoreUp);
 				_manager._state = new IdleGameManagerState(_manager);
 			}
