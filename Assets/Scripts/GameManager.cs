@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour {
 	private UIManager ui;
 	private GameManagerState _state;
 	private int z = 0;
-	private int _ringJump = 50;
+	public int _ringJump = 50;
 	
 	
 	// Use this for initialization
