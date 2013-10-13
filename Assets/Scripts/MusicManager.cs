@@ -8,6 +8,7 @@ public class MusicManager : MonoBehaviour {
 	
 	private GameManager game;
 	private UIManager ui;
+	private Light flareLight;
 	private MusicManagerState _state;
 	
 	private float _timeSinceLastMusicTick;
@@ -20,7 +21,9 @@ public class MusicManager : MonoBehaviour {
 	}
 	
 	void Start() {
+		flareLight = GameObject.Find("FlareSpot").GetComponent<Light>();
 		_state = new NormalMusicState(this);
+		
 		game = GameObject.Find("GameManager").GetComponent<GameManager>();
 		ui = GameObject.Find("UIManager").GetComponent<UIManager>();
 	}
@@ -33,9 +36,11 @@ public class MusicManager : MonoBehaviour {
 		protected MusicManager _manager;
 		private int sampleCountBuffer = 0;
 		protected bool scoreUp;
+		protected Color origColor;
 		
 		public MusicManagerState(MusicManager manager) {
 			_manager = manager;
+			origColor = _manager.flareLight.color;
 		}
 		
 		virtual public void Update() {
@@ -68,6 +73,9 @@ public class MusicManager : MonoBehaviour {
 	}
 	
 	private class NormalMusicState : MusicManagerState {
+		private float transition = 0;
+		private float animLength = 1;
+		
 		public NormalMusicState(MusicManager manager) : base(manager) {
 			_manager.audio.clip = _manager.mainMusic;
 			_manager.audio.Play();
@@ -78,6 +86,10 @@ public class MusicManager : MonoBehaviour {
 		override public void Update() {
 			scoreUp = true;
 			base.Update();
+			
+			transition += Time.deltaTime;
+			_manager.flareLight.color = Color.Lerp(origColor, Color.blue, transition / animLength);
+			
 			if (Input.GetKey(KeyCode.Return)) {
 				_manager._timeSinceLastMusicTick = 0;
 				_manager._state = new IntroBossMusicManagerState(_manager);
@@ -86,6 +98,9 @@ public class MusicManager : MonoBehaviour {
 	}
 	
 	private class IntroBossMusicManagerState : MusicManagerState {
+		private float transition = 0;
+		private float animLength = 5;
+		
 		public IntroBossMusicManagerState(MusicManager manager) : base(manager) {
 			_manager.audio.clip = _manager.introBossMusic;
 			_manager.audio.Play();
@@ -95,6 +110,10 @@ public class MusicManager : MonoBehaviour {
 		override public void Update() {
 			scoreUp = false;
 			base.Update();
+			
+			transition += Time.deltaTime;
+			_manager.flareLight.color = Color.Lerp(origColor, Color.red, transition / animLength);
+			
 			if (!_manager.audio.isPlaying) {
 				_manager._state = new BossMusicManagerState(_manager);	
 			}
