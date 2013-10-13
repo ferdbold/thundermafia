@@ -8,68 +8,48 @@ public class ShootingPlayer : MonoBehaviour {
 	private float nextBullet = 0.0f;	
 	private Vector3 mousePos;
 	private float posX;
-	public float maxRotation = 360;
-	//private float posY;
-
-	// Use this for initialization
-	void Start () {
-
-	}
+	public float rotationMax = 360.0f;
+	private Transform sprite;
+	private Vector3 bufferTargetPos = new Vector3(0, 0, 0);
 	
+	void Start() {
+		sprite = transform.GetChild(0);
+		Vector3 objectPos = Camera.main.WorldToScreenPoint(transform.position);
+		mousePos = Input.mousePosition;
+		Vector3 targetPos = mousePos - objectPos;
+		if (targetPos.x < 0) {
+			sprite.Rotate(0, 0, 180);
+			Vector2 texScale = sprite.gameObject.renderer.material.mainTextureScale;
+			texScale.x *= -1;
+			sprite.gameObject.renderer.material.mainTextureScale = texScale;
+		}
+	}
+
 	// Le vaisseau tire tant que le joueur appuie sur le bouton gauche de la souris
 	void Update () {
 		
-		/*
+		Vector3 objectPos = Camera.main.WorldToScreenPoint(transform.position);
 		mousePos = Input.mousePosition;
-    	mousePos.z = -10.0f; //The distance between the camera and object
-    	objectPos = Camera.main.WorldToScreenPoint(player.position);	
-    	mousePos.x = mousePos.x - objectPos.x;
-    	mousePos.y = mousePos.y - objectPos.y;
-		angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;    		
-		transform.rotation = Quaternion.Euler(0.0f, angle, 0.0f);
-		*/
-		/*
-		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+		Vector3 targetPos = mousePos - objectPos;
+		targetPos.z = transform.parent.position.z;
+		if (bufferTargetPos.x * targetPos.x < 0 && targetPos.x != 0) {
+			sprite.Rotate(0, 0, 180);
+			Vector2 texScale = sprite.gameObject.renderer.material.mainTextureScale;
+			texScale.x *= -1;
+			sprite.gameObject.renderer.material.mainTextureScale = texScale;
+		}
+		bufferTargetPos = targetPos;
 		
-		RaycastHit hit;
+		Debug.Log(targetPos);
+		
+		transform.LookAt(targetPos);
 
-		if (Physics.Raycast(ray, out hit)) {
-			
-			posX = hit.transform.position.x;
-			
-			posY = hit.transform.position.y;
-			
-			//Vector3 target = new Vector3(posX, posY, transform.position.z);
-			
-			//transform.LookAt(target);
-			
-		 */
-			
-		mousePos = Input.mousePosition;
-		Debug.Log(mousePos);
-		float bufferX = mousePos.x;
-		float bufferY = mousePos.y;
-		mousePos.x = mousePos.z;
-		mousePos.y = bufferX;
-		mousePos.z = bufferY;
-		
-		Vector3 the_return = Vector3.RotateTowards (transform.up, mousePos, Mathf.Deg2Rad * maxRotation * Time.deltaTime, 1);
-		
-		transform.rotation = Quaternion.LookRotation (the_return);
-		
-		//transform.rotation.LookRotation(Quaternion.Euler(mousePos));
-		
-		
 		if (Input.GetButton("Fire1") && Time.time > nextBullet){
 				
 				//transform.rotation = Quaternion.Euler(90, 0, 0);	
 				nextBullet = Time.time + fireRate;
-				GameObject tire = (GameObject)GameObject.Instantiate (bullet, transform.position, transform.rotation);
+				GameObject tire = (GameObject)GameObject.Instantiate (bullet, transform.position + transform.forward * 0.5f, transform.rotation);
 				tire.gameObject.tag="PlayerProjectile";
 			}
-			
-			
 		}
-
-		
 }
