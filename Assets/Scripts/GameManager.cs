@@ -30,8 +30,10 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	void Update () {
-		if (Input.GetKeyDown(KeyCode.B))
-			bossArea = !bossArea;
+		if (Input.GetKeyDown(KeyCode.Return))
+			bossArea = true;
+		if (Input.GetKeyDown(KeyCode.Backspace))
+			bossArea = false;
 		_state.Update();
 	}
 	
@@ -117,7 +119,7 @@ public class GameManager : MonoBehaviour {
 		private void LevelUp(bool scoreUp) {
 			_manager.SetGoal(0);
 			if (scoreUp) _manager.score++;
-			//_manager.ui.score.amount = _manager.score;
+			_manager.ui.score.amount = _manager.score;
 		}
 	}
 }

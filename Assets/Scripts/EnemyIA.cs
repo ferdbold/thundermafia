@@ -10,6 +10,7 @@ public class EnemyIA : MonoBehaviour
 	public int frequencyOfAttacks = 50;
 	private int it;
 	private EnemyIAState _state;
+	public float goal;
 	
 	// Use this for initialization
 	void Start ()
@@ -22,6 +23,16 @@ public class EnemyIA : MonoBehaviour
 	void Update ()
 	{
 		_state.Update ();
+	}
+	
+	public void OnTriggerEnter (Collider other)
+	{
+		if (other.transform.tag == "PlayerProjectile") {
+			Projectile projectile = other.GetComponent<Projectile> ();
+			GameManager gm = GameObject.Find ("GameManager").GetComponent<GameManager> ();
+			gm.AddToGoal (goal);
+			Destroy (transform);
+		}
 	}
 	
 	/// <summary>
@@ -133,8 +144,8 @@ public class EnemyIA : MonoBehaviour
 		
 			if (GameInfo.GetPlayerDistanceFromPoint (_ia.transform.position) > _ia.distanceBeforeAttacking) {
 				float move = _ia.speed;
-				if(GameInfo.GetPlayerDistanceFromPoint(_ia.transform.position) < _ia.speed)
-					move = GameInfo.GetPlayerDistanceFromPoint(_ia.transform.position);
+				if (GameInfo.GetPlayerDistanceFromPoint (_ia.transform.position) < _ia.speed)
+					move = GameInfo.GetPlayerDistanceFromPoint (_ia.transform.position);
 				_ia.transform.Translate (0, 0, move);
 			} else if (_ia.it >= _ia.frequencyOfAttacks) {
 				_ia.it = 0;

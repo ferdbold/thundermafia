@@ -73,7 +73,7 @@ public class MusicManager : MonoBehaviour {
 			// Détection du changement de cercles
 			if (_manager._timeSinceLastMusicTick >= minThreshold) {	
 				_manager.game.OnRingChange(ratioAnimation, scoreUp);
-				Debug.Log(scoreUp);
+				//Debug.Log(scoreUp);
 				
 				if (_manager._timeSinceLastMusicTick >= nextTick) {
 					_manager._timeSinceLastMusicTick = 0;	
