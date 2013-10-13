@@ -12,7 +12,8 @@ public class ShootingPlayer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+		
+		
 	}
 	
 	// Le vaisseau tire tant que le joueur appuie sur le bouton gauche de la souris
