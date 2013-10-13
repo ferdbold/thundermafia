@@ -7,9 +7,3 @@
 *.sln
 *.DS_Store
 local
-builds
-*.pidb
-*.unityproj
-Assets/Scenes
-*.userprefs
-

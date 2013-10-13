@@ -31,7 +31,7 @@ public class EnemyIA : MonoBehaviour
 			Projectile projectile = other.GetComponent<Projectile> ();
 			GameManager gm = GameObject.Find ("GameManager").GetComponent<GameManager> ();
 			gm.AddToGoal (goal);
-			Destroy (transform);
+			Destroy (transform.gameObject);
 		}
 	}
 	
