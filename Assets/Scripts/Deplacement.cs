@@ -8,9 +8,6 @@ public class Deplacement : MonoBehaviour {
 	public float speed = 10;
 	public float maxSpeed = 10;
 	
-	// Position max du vaisseau
-	public float radiusArene = 10;
-	
 	// Position de départ
 	public float playerPosHStart = 0f;
 	public float playerPosVStart = 0f;
@@ -26,7 +23,7 @@ public class Deplacement : MonoBehaviour {
 		dir = Vector3.ClampMagnitude(dir, 1);
 		
 		// Bordures de l'écran
-		float deltaArene = Mathf.Sqrt(Mathf.Pow(transform.position.x, 2) + Mathf.Pow(transform.position.y, 2)) - radiusArene;
+		float deltaArene = Mathf.Sqrt(Mathf.Pow(transform.position.x, 2) + Mathf.Pow(transform.position.y, 2)) - GameManager.arenaRadius;
 		if (deltaArene > 0) {
 			Vector3 repelForce = Vector3.Normalize(new Vector3(transform.position.x, transform.position.y, 0));
 			

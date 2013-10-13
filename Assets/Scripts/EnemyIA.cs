@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class EnemyIA : MonoBehaviour
@@ -9,59 +9,145 @@ public class EnemyIA : MonoBehaviour
 	public GameObject bullet;
 	public int frequencyOfAttacks = 50;
 	private int it;
-	public enum State{active,passive};
-	public State state = State.active;
+	private EnemyIAState _state;
 	
 	// Use this for initialization
 	void Start ()
 	{
 		it = frequencyOfAttacks;
+		_state = new EnemyPassiveState (this);
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		if(transform.position.z == GameInfo.GetPlayerLocation ().z)
-			state = State.active;
-		else
-		{
-			state = State.passive;
-			
-			if(transform.position.z <= GameInfo.GetPlayerLocation ().z -100)
-				Destroy (this.gameObject);
-		}
-		Move ();
+		_state.Update ();
 	}
 	
 	/// <summary>
-	/// Move this instance.
+	/// Classe de base pour les états des ennemis
 	/// </summary>
-	private void Move ()
+	abstract private class EnemyIAState
 	{
-		if (state == State.active) {
-			Vector3 nextLocation = transform.position;		
-			Vector3 desired = GameInfo.GetPlayerLocation () - transform.position;
-			desired.z = 0;
-			Vector3 the_return = Vector3.RotateTowards (transform.forward, desired, Mathf.Deg2Rad * maxRotation * Time.deltaTime, 1);
-			transform.rotation = Quaternion.LookRotation (the_return);
+		protected EnemyIA _ia;
 		
-			if (GameInfo.GetPlayerDistanceFromPoint (transform.position) > distanceBeforeAttacking) {
-				transform.Translate (0, 0, speed);
-			} else if (it >= frequencyOfAttacks) {
-				it = 0;
+		public EnemyIAState (EnemyIA ia)
+		{
+			_ia = ia;
+		}
+		
+		virtual public void Update ()
+		{
+		}
+		
+		virtual public void Move ()
+		{
+		}
+	}
+	
+	/// <summary>
+	/// État passif (n'attaque pas le joueur)
+	/// </summary>
+	private class EnemyPassiveState:EnemyIAState
+	{
+		public EnemyPassiveState (EnemyIA ia):base(ia)
+		{
+		}
+		
+		/// <summary>
+		/// Update this instance.
+		/// </summary>
+		override public void Update ()
+		{
+			base.Update ();
+			Vector3 playerZ = GameInfo.GetPlayerLocation ();
+			playerZ.x = 0;
+			playerZ.y = 0;
+			Vector3 enemyZ = _ia.transform.position;
+			enemyZ.x = 0;
+			enemyZ.y = 0;
+			
+			if (_ia.transform.position.z <= GameInfo.GetPlayerLocation ().z - 10)
+				Destroy (_ia.gameObject);
+			
+			if (Vector3.Distance (playerZ, enemyZ) <= 3f)
+				_ia._state = new EnemyActiveState (_ia);
+			
+			Move ();
+		}
+		
+		/// <summary>
+		/// Move this instance.
+		/// </summary>
+		override public void Move ()
+		{
+			// WANDERING
+		}
+	}
+	
+	/// <summary>
+	/// État actif (attaque le joueur)
+	/// </summary>
+	private class EnemyActiveState:EnemyIAState
+	{
+		public EnemyActiveState (EnemyIA ia):base(ia)
+		{
+		}
+		
+		/// <summary>
+		/// Update this instance.
+		/// </summary>
+		override public void Update ()
+		{
+			base.Update ();
+			Vector3 playerZ = GameInfo.GetPlayerLocation ();
+			playerZ.x = 0;
+			playerZ.y = 0;
+			Vector3 enemyZ = _ia.transform.position;
+			enemyZ.x = 0;
+			enemyZ.y = 0;
+			
+			if (_ia.transform.position.z <= GameInfo.GetPlayerLocation ().z - 10 && !GameManager.bossArea)
+				Destroy (_ia.gameObject);
+			
+			if (Vector3.Distance (playerZ, enemyZ) > 3f && !GameManager.bossArea)
+				_ia._state = new EnemyPassiveState (_ia);
+
+			Move ();
+		}
+		
+		/// <summary>
+		/// Move enemy.
+		/// </summary>
+		override public void Move ()
+		{
+			Vector3 nextLocation = _ia.transform.position;		
+			Vector3 desired = GameInfo.GetPlayerLocation () - _ia.transform.position;
+			
+			if (!GameManager.bossArea)
+				desired.z = 0;
+			Vector3 the_return = Vector3.RotateTowards (_ia.transform.forward, desired, Mathf.Deg2Rad * _ia.maxRotation * Time.deltaTime, 1);
+			if (!GameManager.bossArea)
+				the_return.z = 0;
+			_ia.transform.rotation = Quaternion.LookRotation (the_return);
+		
+			if (GameInfo.GetPlayerDistanceFromPoint (_ia.transform.position) > _ia.distanceBeforeAttacking) {
+				_ia.transform.Translate (0, 0, _ia.speed);
+			} else if (_ia.it >= _ia.frequencyOfAttacks) {
+				_ia.it = 0;
 				Attack ();
 			}
-			it++;
+			_ia.it++;
 		}
-	}
-	
-	/// <summary>
-	/// Attack the player.
-	/// </summary>
-	private void Attack ()
-	{
-		GameObject test = (GameObject)GameObject.Instantiate (bullet, transform.position, transform.rotation);
-		test.gameObject.tag = "EnemyProjectile";
-		test.gameObject.transform.parent = this.transform;
+		
+		/// <summary>
+		/// Attack player.
+		/// </summary>
+		private void Attack ()
+		{
+			GameObject test = (GameObject)GameObject.Instantiate (_ia.bullet, _ia.transform.position, _ia.transform.rotation);
+			test.gameObject.tag = "EnemyProjectile";
+			test.gameObject.transform.parent = _ia.transform;
+		}
 	}
 }

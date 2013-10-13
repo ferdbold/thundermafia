@@ -34,9 +34,11 @@ public class GameInfo : MonoBehaviour
 	{
 		Vector3 vec1, vec2;
 		vec1 = GetPlayerLocation ();
-		vec1.z = 0;
+		if (!GameManager.bossArea)
+			vec1.z = 0;
 		vec2 = point;
-		vec2.z = 0;
+		if (!GameManager.bossArea)
+			vec2.z = 0;
 		return Vector3.Distance (vec2, vec1);
-	}	
+	}
 }
