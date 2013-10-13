@@ -9,10 +9,11 @@ public class ShootingPlayer : MonoBehaviour {
 	private Vector3 mousePos;
 	private float posX;
 	public float rotationMax = 360.0f;
+	public AudioClip laser;
+	
 
 	// Use this for initialization
 	void Start () {
-		
 		
 	}
 	
@@ -49,7 +50,6 @@ public class ShootingPlayer : MonoBehaviour {
 		
 		mousePos = Input.mousePosition;
 		
-		
 		Vector3 the_return = Vector3.RotateTowards (transform.forward, mousePos - objectPos, Mathf.Deg2Rad * rotationMax * Time.deltaTime, 1);
 		
 		transform.rotation = Quaternion.LookRotation (the_return);
@@ -59,6 +59,7 @@ public class ShootingPlayer : MonoBehaviour {
 		
 		if (Input.GetButton("Fire1") && Time.time > nextBullet){
 				
+				audio.PlayOneShot(laser);
 				//transform.rotation = Quaternion.Euler(90, 0, 0);	
 				nextBullet = Time.time + fireRate;
 				GameObject tire = (GameObject)GameObject.Instantiate (bullet, transform.position, transform.rotation);
