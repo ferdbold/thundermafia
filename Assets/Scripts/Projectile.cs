@@ -3,9 +3,9 @@ using System.Collections;
 
 public class Projectile : MonoBehaviour
 {
-	public float speed = 10;
+	public float speed = 0.6f;
 	public float live = 1;
-	public int damage = 0;
+	public int damage = 10;
 	
 	// Use this for initialization
 	void Start ()
