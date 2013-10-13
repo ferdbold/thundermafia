@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour {
 	/// </summary>
 	private void SpawnRings() {
 		GameObject ringContainer = GameObject.Find("Rings");
-		while (z < 10000) {
+		while (z < 20000) {
 			GameObject ring = GameObject.Instantiate(ringPrefab, new Vector3(0, 0 , z), ringPrefab.transform.rotation) as GameObject;
 			ring.transform.parent = ringContainer.transform;
 			ring.name = "Ring " + (z / _ringJump).ToString();
@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour {
 		private void LevelUp(bool scoreUp) {
 			_manager.SetGoal(0);
 			if (scoreUp) _manager.score++;
-			//_manager.ui.score.amount = _manager.score;
+			_manager.ui.score.amount = _manager.score;
 		}
 	}
 }

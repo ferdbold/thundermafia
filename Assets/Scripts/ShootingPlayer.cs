@@ -11,6 +11,7 @@ public class ShootingPlayer : MonoBehaviour {
 	public float rotationMax = 360.0f;
 	private Transform sprite;
 	private Vector3 bufferTargetPos = new Vector3(0, 0, 0);
+	bool dangerCross = false;
 
 	
 	void Start() {
@@ -18,11 +19,14 @@ public class ShootingPlayer : MonoBehaviour {
 		Vector3 objectPos = Camera.main.WorldToScreenPoint(transform.position);
 		mousePos = Input.mousePosition;
 		Vector3 targetPos = mousePos - objectPos;
+		
 		if (targetPos.x < 0) {
 			sprite.Rotate(0, 0, 180);
 			Vector2 texScale = sprite.gameObject.renderer.material.mainTextureScale;
 			texScale.x *= -1;
 			sprite.gameObject.renderer.material.mainTextureScale = texScale;
+			
+			dangerCross = true;
 		}
 	}
 
@@ -33,11 +37,23 @@ public class ShootingPlayer : MonoBehaviour {
 		mousePos = Input.mousePosition;
 		Vector3 targetPos = mousePos - objectPos;
 		targetPos.z = transform.parent.position.z;
-		if (bufferTargetPos.x * targetPos.x < 0 && targetPos.x != 0) {
+		
+		// Thunder Mafia = 1, Quaternions = 0
+		if (bufferTargetPos.x * targetPos.x < 0 && targetPos.x != 0) {			
 			sprite.Rotate(0, 0, 180);
 			Vector2 texScale = sprite.gameObject.renderer.material.mainTextureScale;
 			texScale.x *= -1;
 			sprite.gameObject.renderer.material.mainTextureScale = texScale;
+			
+			if (dangerCross) {
+				dangerCross = false;	
+			} else {
+				Transform bulletSprite = bullet.transform.GetChild(0);
+				bulletSprite.Rotate(0, 0, 180);
+				Vector2 bulletTexScale = bulletSprite.gameObject.renderer.material.mainTextureScale; // .yResteUneHeureAuGameJam
+				bulletTexScale.x *= -1;
+				bulletSprite.gameObject.renderer.material.mainTextureScale = bulletTexScale;
+			}
 		}
 		bufferTargetPos = targetPos;
 		
@@ -50,6 +66,7 @@ public class ShootingPlayer : MonoBehaviour {
 				//transform.rotation = Quaternion.Euler(90, 0, 0);	
 				nextBullet = Time.time + fireRate;
 				GameObject tire = (GameObject)GameObject.Instantiate (bullet, transform.position + transform.forward * 0.5f, transform.rotation);
+				tire.GetComponent<Projectile>().speed *= 2;
 				tire.gameObject.tag="PlayerProjectile";
 			}
 		}
