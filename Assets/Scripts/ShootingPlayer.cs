@@ -11,6 +11,7 @@ public class ShootingPlayer : MonoBehaviour {
 	public float rotationMax = 360.0f;
 	private Transform sprite;
 	private Vector3 bufferTargetPos = new Vector3(0, 0, 0);
+
 	
 	void Start() {
 		sprite = transform.GetChild(0);
