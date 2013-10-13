@@ -68,7 +68,7 @@ public class MusicManager : MonoBehaviour {
 				if (_manager._timeSinceLastMusicTick >= nextTick) {
 					_manager._timeSinceLastMusicTick = 0;	
 				}
-			}	
+			}
 		}
 	}
 	
