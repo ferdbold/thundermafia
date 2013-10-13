@@ -11,7 +11,7 @@ public class MusicManager : MonoBehaviour {
 	private MusicManagerState _state;
 	
 	private float _timeSinceLastMusicTick;
-	private float _animStartPercentage = 0.8F;
+	private float _animStartPercentage;
 	
 	private float _bpm;
 	public float bpm {
@@ -67,6 +67,7 @@ public class MusicManager : MonoBehaviour {
 			_manager.audio.clip = _manager.mainMusic;
 			_manager.audio.Play();
 			_manager.bpm = 87.5f;
+			_manager._animStartPercentage = 0.9F;
 		}	
 		
 		override public void Update() {
@@ -96,6 +97,7 @@ public class MusicManager : MonoBehaviour {
 			_manager.audio.clip = _manager.bossMusic;
 			_manager.audio.Play();
 			_manager.bpm = 290;
+			_manager._animStartPercentage = 0.8F;
 		}
 		
 		override public void Update() {
