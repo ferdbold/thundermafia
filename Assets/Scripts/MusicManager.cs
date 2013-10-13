@@ -31,6 +31,8 @@ public class MusicManager : MonoBehaviour {
 	
 	abstract private class MusicManagerState {
 		protected MusicManager _manager;
+		private int sampleCountBuffer = 0;
+		protected bool scoreUp;
 		
 		public MusicManagerState(MusicManager manager) {
 			_manager = manager;
@@ -38,9 +40,11 @@ public class MusicManager : MonoBehaviour {
 		
 		virtual public void Update() {
 			// Transition des anneaux à chaque mesure
-			_manager._timeSinceLastMusicTick += Time.deltaTime;
 			
-			float nextTick = 240 / _manager.bpm;
+			_manager._timeSinceLastMusicTick += _manager.audio.timeSamples - sampleCountBuffer;
+			sampleCountBuffer = _manager.audio.timeSamples;
+			
+			float nextTick = 240 * 44100 / _manager.bpm;
 			float lengthAnimation = nextTick * (1 - _manager._animStartPercentage);
 			float minThreshold = nextTick * _manager._animStartPercentage;
 			float deltaAnimation = Mathf.Min(_manager._timeSinceLastMusicTick - minThreshold, lengthAnimation);
@@ -53,7 +57,8 @@ public class MusicManager : MonoBehaviour {
 			
 			// Détection du changement de cercles
 			if (_manager._timeSinceLastMusicTick >= minThreshold) {	
-				_manager.game.OnRingChange(ratioAnimation);
+				_manager.game.OnRingChange(ratioAnimation, scoreUp);
+				Debug.Log(scoreUp);
 				
 				if (_manager._timeSinceLastMusicTick >= nextTick) {
 					_manager._timeSinceLastMusicTick = 0;	
@@ -71,8 +76,10 @@ public class MusicManager : MonoBehaviour {
 		}	
 		
 		override public void Update() {
+			scoreUp = true;
 			base.Update();
 			if (Input.GetKey(KeyCode.Return)) {
+				_manager._timeSinceLastMusicTick = 0;
 				_manager._state = new IntroBossMusicManagerState(_manager);
 			}
 		}
@@ -86,6 +93,8 @@ public class MusicManager : MonoBehaviour {
 		}
 		
 		override public void Update() {
+			scoreUp = false;
+			base.Update();
 			if (!_manager.audio.isPlaying) {
 				_manager._state = new BossMusicManagerState(_manager);	
 			}
@@ -101,8 +110,10 @@ public class MusicManager : MonoBehaviour {
 		}
 		
 		override public void Update() {
+			scoreUp = false;
 			base.Update();
-			if (Input.GetKey(KeyCode.Return)) {
+			if (Input.GetKey(KeyCode.Backspace)) {
+				_manager._timeSinceLastMusicTick = 0;
 				_manager._state = new NormalMusicState(_manager);	
 			}
 		}
