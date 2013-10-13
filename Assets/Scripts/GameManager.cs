@@ -5,6 +5,8 @@ public class GameManager : MonoBehaviour {
 	public GameObject ringPrefab;
 	public float difficulty = 0.6f;
 	public float goal = 0;
+	public int damagePerFailure = 25;
+	public int score = 0;
 	
 	private Deplacement playerController;
 	private Player playerLogic;
@@ -45,6 +47,16 @@ public class GameManager : MonoBehaviour {
 		_state.OnRingChange(ratio);
 	}
 	
+	public void AddToGoal(float amount) {
+		goal += amount;
+		ui.goal.amount = goal;
+	}
+	
+	public void SetGoal(float amount) {
+		goal = amount;
+		ui.goal.amount = goal;
+	}
+	
 	abstract private class GameManagerState {
 		protected GameManager _manager;
 		
@@ -61,10 +73,6 @@ public class GameManager : MonoBehaviour {
 			
 		}
 		
-		override public void Update() {
-			Debug.Log("Idle");	
-		}
-		
 		override public void OnRingChange(float ratio) {
 			_manager._state = new RingChangeGameManagerState(_manager);	
 		}
@@ -75,21 +83,26 @@ public class GameManager : MonoBehaviour {
 			
 		}
 		
-		override public void Update() {
-			Debug.Log("RingChange");	
-		}
-		
 		override public void OnRingChange(float ratio) {
 			_manager.playerController.transform.position = Vector3.Lerp(_manager.playerController.transform.position, _manager.playerController.transform.position + new Vector3(0, 0, _manager._ringJump/16), ratio);
 			
 			if (ratio >= 1) {
 				CheckForSuccess();
+				LevelUp();
 				_manager._state = new IdleGameManagerState(_manager);
 			}
 		}
 		
 		private void CheckForSuccess() {
-			
+			if (_manager.goal < _manager.difficulty) {
+				_manager.playerLogic.TakeDamage(_manager.damagePerFailure);	
+			}
+		}
+		
+		private void LevelUp() {
+			_manager.SetGoal(0);
+			_manager.score++;
+			_manager.ui.score.amount = _manager.score;
 		}
 	}
 }

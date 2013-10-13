@@ -21,7 +21,7 @@ public class Player : MonoBehaviour {
 		if (Input.GetKeyUp(KeyCode.Space)) {
 			TakeDamage(5);	
 		} else if (Input.GetKeyUp(KeyCode.V)) {
-			game.goal += 0.1f;
+			game.AddToGoal(0.1f);
 		}
 		
 		RegenLife();
