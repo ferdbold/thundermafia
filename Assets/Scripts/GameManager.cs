@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour {
 	private GameManagerState _state;
 	private int z = 0;
 	public int _ringJump = 50;
+	public static float arenaRadius=35;
+	public static bool bossArea=false;
 	
 	void Start () {
 		GameObject playerObj = GameObject.Find("Player");
@@ -28,6 +30,8 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	void Update () {
+		if (Input.GetKeyDown(KeyCode.B))
+			bossArea = !bossArea;
 		_state.Update();
 	}
 	
@@ -98,6 +102,7 @@ public class GameManager : MonoBehaviour {
 			if (ratio >= 1) {
 				CheckForSuccess();
 				EnemySpawner.canSpawnEnemy=true; // Dit au EnemySpawner qu'il peut créer de nouveaux ennemis
+				EnemySpawner.actualStage++;
 				LevelUp(scoreUp);
 				_manager._state = new IdleGameManagerState(_manager);
 			}
@@ -112,7 +117,7 @@ public class GameManager : MonoBehaviour {
 		private void LevelUp(bool scoreUp) {
 			_manager.SetGoal(0);
 			if (scoreUp) _manager.score++;
-			_manager.ui.score.amount = _manager.score;
+			//_manager.ui.score.amount = _manager.score;
 		}
 	}
 }
