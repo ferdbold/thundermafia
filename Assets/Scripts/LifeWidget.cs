@@ -17,7 +17,5 @@ public class LifeWidget : MonoBehaviour {
 		
 		GUI.skin.box.normal.background = lifeTex;
 		GUI.Box(new Rect(0, 0, Screen.width * _amount / 100, widgetHeight), GUIContent.none);
-		
-		Debug.Log(_amount);
 	}
 }

@@ -13,8 +13,14 @@ public class UIManager : MonoBehaviour {
 		get { return _lifeWidget; }
 	}
 	
+	private GoalWidget _goalWidget;
+	public GoalWidget goal {
+		get { return _goalWidget; }
+	}
+	
 	void Awake () {
 		_tempoWidget = transform.GetComponentInChildren<TempoWidget>();
 		_lifeWidget = transform.GetComponentInChildren<LifeWidget>();
+		_goalWidget = transform.GetComponentInChildren<GoalWidget>();
 	}
 }

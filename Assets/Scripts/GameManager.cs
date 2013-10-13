@@ -3,30 +3,32 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
 	public GameObject ringPrefab;
+	public float difficulty = 0.6f;
+	public float goal = 0;
 	
-	private Deplacement player;
+	private Deplacement playerController;
+	private Player playerLogic;
 	private UIManager ui;
 	private GameManagerState _state;
 	private int z = 0;
 	public int _ringJump = 50;
 	
-	
-	// Use this for initialization
 	void Start () {
-		player = GameObject.Find("Player").GetComponent<Deplacement>();
+		GameObject playerObj = GameObject.Find("Player");
+		playerController = playerObj.GetComponent<Deplacement>();
+		playerLogic = playerObj.GetComponent<Player>();
 		ui = GameObject.Find("UIManager").GetComponent<UIManager>();
 		
 		SpawnRings();
 		_state = new IdleGameManagerState(this);
 	}
 	
-	// Update is called once per frame
 	void Update () {
 		_state.Update();
 	}
 	
 	public void AnimateRingChange(float ratio) {
-		player.transform.position = Vector3.Lerp(player.transform.position, player.transform.position + new Vector3(0, 0, _ringJump/16), ratio);
+		playerController.transform.position = Vector3.Lerp(playerController.transform.position, playerController.transform.position + new Vector3(0, 0, _ringJump/16), ratio);
 	}
 	
 	/// <summary>
@@ -59,6 +61,10 @@ public class GameManager : MonoBehaviour {
 			
 		}
 		
+		override public void Update() {
+			Debug.Log("Idle");	
+		}
+		
 		override public void OnRingChange(float ratio) {
 			_manager._state = new RingChangeGameManagerState(_manager);	
 		}
@@ -66,11 +72,24 @@ public class GameManager : MonoBehaviour {
 	
 	private class RingChangeGameManagerState : GameManagerState {
 		public RingChangeGameManagerState(GameManager manager) : base(manager) {
-				
+			
+		}
+		
+		override public void Update() {
+			Debug.Log("RingChange");	
 		}
 		
 		override public void OnRingChange(float ratio) {
-			_manager.player.transform.position = Vector3.Lerp(_manager.player.transform.position, _manager.player.transform.position + new Vector3(0, 0, _manager._ringJump/16), ratio);
+			_manager.playerController.transform.position = Vector3.Lerp(_manager.playerController.transform.position, _manager.playerController.transform.position + new Vector3(0, 0, _manager._ringJump/16), ratio);
+			
+			if (ratio >= 1) {
+				CheckForSuccess();
+				_manager._state = new IdleGameManagerState(_manager);
+			}
 		}
-	}		
+		
+		private void CheckForSuccess() {
+			
+		}
+	}
 }

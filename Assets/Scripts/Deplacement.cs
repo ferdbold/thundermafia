@@ -3,9 +3,9 @@ using System.Collections;
 
 public class Deplacement : MonoBehaviour {
 	// Vitesse du vaisseau
-	public float decay = 0.99f;
+	public float decay = 0.9f;
 
-	public float speed = 0.001f;
+	public float speed = 10;
 	public float maxSpeed = 10;
 	
 	// Position max du vaisseau
