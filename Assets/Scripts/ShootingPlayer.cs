@@ -46,8 +46,14 @@ public class ShootingPlayer : MonoBehaviour {
 		 */
 			
 		mousePos = Input.mousePosition;
+		Debug.Log(mousePos);
+		float bufferX = mousePos.x;
+		float bufferY = mousePos.y;
+		mousePos.x = mousePos.z;
+		mousePos.y = bufferX;
+		mousePos.z = bufferY;
 		
-		Vector3 the_return = Vector3.RotateTowards (transform.forward, mousePos, Mathf.Deg2Rad * maxRotation * Time.deltaTime, 1);
+		Vector3 the_return = Vector3.RotateTowards (transform.up, mousePos, Mathf.Deg2Rad * maxRotation * Time.deltaTime, 1);
 		
 		transform.rotation = Quaternion.LookRotation (the_return);
 		
