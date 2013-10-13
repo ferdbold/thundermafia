@@ -7,11 +7,13 @@ public class EnemyIA : MonoBehaviour
 	public float maxRotation=90;
 	public float distanceBeforeAttacking = 200;
 	public GameObject bullet;
+	public int frequencyOfAttacks=50;
+	private int it;
 	
 	// Use this for initialization
 	void Start ()
 	{
-	
+		it = frequencyOfAttacks;
 	}
 	
 	// Update is called once per frame
@@ -34,8 +36,12 @@ public class EnemyIA : MonoBehaviour
 		if (GameInfo.GetPlayerDistanceFromPoint (transform.position) > distanceBeforeAttacking) {
 			transform.Translate (0, 0, speed);
 		}
-		else
+		else if(it >= frequencyOfAttacks)
+		{
+			it=0;
 			Attack();
+		}
+		it++;
 	}
 	
 	/// <summary>
