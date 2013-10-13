@@ -27,6 +27,14 @@ public class Player : MonoBehaviour {
 		RegenLife();
 	}
 	
+	 public void OnTriggerEnter (Collider other) {
+		if(other.transform.tag == "EnemyProjectile")
+		{
+			Projectile projectile = other.GetComponent<Projectile>();
+			TakeDamage (projectile.damage);
+		}
+	}
+	
 	public void TakeDamage(int amount) {
 		life -= amount;
 		if (life <= 0) {
