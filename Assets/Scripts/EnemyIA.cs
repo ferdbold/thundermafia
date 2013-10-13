@@ -132,7 +132,10 @@ public class EnemyIA : MonoBehaviour
 			_ia.transform.rotation = Quaternion.LookRotation (the_return);
 		
 			if (GameInfo.GetPlayerDistanceFromPoint (_ia.transform.position) > _ia.distanceBeforeAttacking) {
-				_ia.transform.Translate (0, 0, _ia.speed);
+				float move = _ia.speed;
+				if(GameInfo.GetPlayerDistanceFromPoint(_ia.transform.position) < _ia.speed)
+					move = GameInfo.GetPlayerDistanceFromPoint(_ia.transform.position);
+				_ia.transform.Translate (0, 0, move);
 			} else if (_ia.it >= _ia.frequencyOfAttacks) {
 				_ia.it = 0;
 				Attack ();

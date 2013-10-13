@@ -6,6 +6,7 @@ public class EnemySpawner : MonoBehaviour
 	public GameObject enemy;
 	public static int actualStage = 0;
 	public static bool canSpawnEnemy = true;
+	//public static float 
 	private static int zMultiplicator = 50;
 	private static int enemiesToSpawn=0;
 	private bool firstLvlEnemiesSpawned=false;
