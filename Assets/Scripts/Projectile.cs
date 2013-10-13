@@ -4,13 +4,12 @@ using System.Collections;
 public class Projectile : MonoBehaviour
 {
 	public float speed = 10;
-	public float live = 1000;
+	public float live = 1;
 	public int damage = 0;
 	
 	// Use this for initialization
 	void Start ()
 	{
-		transform.rotation = transform.parent.rotation;
 		Destroy (this.gameObject, live);
 	}
 	

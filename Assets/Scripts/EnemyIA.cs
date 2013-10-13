@@ -43,8 +43,7 @@ public class EnemyIA : MonoBehaviour
 	/// </summary>
 	private void Attack()
 	{
-		GameObject test = (GameObject)GameObject.Instantiate (bullet);
-		test.transform.position = transform.position;
+		GameObject test = (GameObject)GameObject.Instantiate (bullet, transform.position, transform.rotation);
 		test.gameObject.tag="EnemyProjectile";
 		test.gameObject.transform.parent = this.transform;
 	}
