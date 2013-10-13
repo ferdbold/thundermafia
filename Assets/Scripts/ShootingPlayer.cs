@@ -8,8 +8,7 @@ public class ShootingPlayer : MonoBehaviour {
 	private float nextBullet = 0.0f;	
 	private Vector3 mousePos;
 	private float posX;
-	public float maxRotation = 360;
-	//private float posY;
+	public float rotationMax = 360.0f;
 
 	// Use this for initialization
 	void Start () {
@@ -45,9 +44,12 @@ public class ShootingPlayer : MonoBehaviour {
 			
 		 */
 			
+		Vector3 objectPos = Camera.main.WorldToScreenPoint(transform.position);
+		
 		mousePos = Input.mousePosition;
 		
-		Vector3 the_return = Vector3.RotateTowards (transform.forward, mousePos, Mathf.Deg2Rad * maxRotation * Time.deltaTime, 1);
+		
+		Vector3 the_return = Vector3.RotateTowards (transform.forward, mousePos - objectPos, Mathf.Deg2Rad * rotationMax * Time.deltaTime, 1);
 		
 		transform.rotation = Quaternion.LookRotation (the_return);
 		
