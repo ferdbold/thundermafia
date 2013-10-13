@@ -30,8 +30,10 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	void Update () {
-		if (Input.GetKeyDown(KeyCode.B))
-			bossArea = !bossArea;
+		if (Input.GetKeyDown(KeyCode.Return))
+			bossArea = true;
+		if (Input.GetKeyDown(KeyCode.Backspace))
+			bossArea = false;
 		_state.Update();
 	}
 	

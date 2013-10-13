@@ -9,10 +9,20 @@ public class ShootingPlayer : MonoBehaviour {
 	private Vector3 mousePos;
 	private float posX;
 	public float rotationMax = 360.0f;
+<<<<<<< HEAD
+	public AudioClip laser;
+	
+
+	// Use this for initialization
+	void Start () {
+		
+	}
+=======
 	private Transform sprite;
 	private Vector3 bufferTargetPos = new Vector3(0, 0, 0);
 	bool dangerCross = false;
 
+>>>>>>> 241552f82d827a849041bf73488683f32e55ec4e
 	
 	void Start() {
 		sprite = transform.GetChild(0);
@@ -57,12 +67,23 @@ public class ShootingPlayer : MonoBehaviour {
 		}
 		bufferTargetPos = targetPos;
 		
+<<<<<<< HEAD
+		Vector3 the_return = Vector3.RotateTowards (transform.forward, mousePos - objectPos, Mathf.Deg2Rad * rotationMax * Time.deltaTime, 1);
+		
+		transform.rotation = Quaternion.LookRotation (the_return);
+		
+		//transform.rotation.LookRotation(Quaternion.Euler(mousePos));
+		
+		
+=======
 		Debug.Log(targetPos);
 		
 		transform.LookAt(targetPos);
 
+>>>>>>> 241552f82d827a849041bf73488683f32e55ec4e
 		if (Input.GetButton("Fire1") && Time.time > nextBullet){
 				
+				audio.PlayOneShot(laser);
 				//transform.rotation = Quaternion.Euler(90, 0, 0);	
 				nextBullet = Time.time + fireRate;
 				GameObject tire = (GameObject)GameObject.Instantiate (bullet, transform.position + transform.forward * 0.5f, transform.rotation);
