@@ -24,7 +24,12 @@ public class EnemyIA : MonoBehaviour
 		if(transform.position.z == GameInfo.GetPlayerLocation ().z)
 			state = State.active;
 		else
+		{
 			state = State.passive;
+			
+			if(transform.position.z <= GameInfo.GetPlayerLocation ().z -100)
+				Destroy (this.gameObject);
+		}
 		Move ();
 	}
 	
