@@ -8,7 +8,13 @@ public class UIManager : MonoBehaviour {
 		get { return _tempoWidget; }
 	}
 	
-	void Start () {
+	private LifeWidget _lifeWidget;
+	public LifeWidget life {
+		get { return _lifeWidget; }
+	}
+	
+	void Awake () {
 		_tempoWidget = transform.GetComponentInChildren<TempoWidget>();
+		_lifeWidget = transform.GetComponentInChildren<LifeWidget>();
 	}
 }
