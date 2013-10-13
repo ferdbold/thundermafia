@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour {
 	private Deplacement playerController;
 	private Player playerLogic;
 	private UIManager ui;
+	private MusicManager music;
 	private GameManagerState _state;
 	private int z = 0;
 	public int _ringJump = 50;
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour {
 		playerController = playerObj.GetComponent<Deplacement>();
 		playerLogic = playerObj.GetComponent<Player>();
 		ui = GameObject.Find("UIManager").GetComponent<UIManager>();
+		music = GameObject.Find("MusicManager").GetComponent<MusicManager>();
 		
 		SpawnRings();
 		_state = new IdleGameManagerState(this);
@@ -37,10 +39,15 @@ public class GameManager : MonoBehaviour {
 	/// Spawns the rings.
 	/// </summary>
 	private void SpawnRings() {
+		GameObject ringContainer = GameObject.Find("Rings");
 		while (z < 10000) {
-			Instantiate(ringPrefab, new Vector3(0, 0 , z), ringPrefab.transform.rotation);
+			GameObject ring = GameObject.Instantiate(ringPrefab, new Vector3(0, 0 , z), ringPrefab.transform.rotation) as GameObject;
+			ring.transform.parent = ringContainer.transform;
+			ring.name = "Ring " + (z / _ringJump).ToString();
 			z += _ringJump;
 		}
+		
+		music.OnReadyRings();
 	}
 	
 	public void OnRingChange(float ratio, bool levelUp) {

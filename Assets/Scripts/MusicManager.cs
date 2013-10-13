@@ -8,11 +8,13 @@ public class MusicManager : MonoBehaviour {
 	
 	private GameManager game;
 	private UIManager ui;
+	private GameObject rings;
 	private Light flareLight;
 	private MusicManagerState _state;
 	
 	private float _timeSinceLastMusicTick;
 	private float _animStartPercentage;
+	private bool _ringsReady = false;
 	
 	private float _bpm;
 	public float bpm {
@@ -22,25 +24,33 @@ public class MusicManager : MonoBehaviour {
 	
 	void Start() {
 		flareLight = GameObject.Find("FlareSpot").GetComponent<Light>();
-		_state = new NormalMusicState(this);
-		
 		game = GameObject.Find("GameManager").GetComponent<GameManager>();
 		ui = GameObject.Find("UIManager").GetComponent<UIManager>();
+		rings = GameObject.Find("Rings");
+		
+		_state = new NormalMusicState(this);
 	}
 	
 	void Update () {
 		_state.Update();
 	}
 	
+	public void OnReadyRings() {
+		_ringsReady = true;
+	}
+	
 	abstract private class MusicManagerState {
 		protected MusicManager _manager;
 		private int sampleCountBuffer = 0;
 		protected bool scoreUp;
-		protected Color origColor;
+		protected Color origColor, origColorRings;
 		
 		public MusicManagerState(MusicManager manager) {
 			_manager = manager;
 			origColor = _manager.flareLight.color;
+			if (_manager._ringsReady) {
+				origColorRings = _manager.rings.transform.GetChild(0).renderer.material.color;	
+			}
 		}
 		
 		virtual public void Update() {
@@ -89,6 +99,11 @@ public class MusicManager : MonoBehaviour {
 			
 			transition += Time.deltaTime;
 			_manager.flareLight.color = Color.Lerp(origColor, Color.blue, transition / animLength);
+			if (_manager._ringsReady) {
+				foreach(MeshRenderer ringRenderer in _manager.rings.GetComponentsInChildren<MeshRenderer>()) {
+					ringRenderer.material.color = Color.Lerp(origColorRings, Color.white, transition / animLength);
+				}
+			}
 			
 			if (Input.GetKey(KeyCode.Return)) {
 				_manager._timeSinceLastMusicTick = 0;
@@ -113,6 +128,11 @@ public class MusicManager : MonoBehaviour {
 			
 			transition += Time.deltaTime;
 			_manager.flareLight.color = Color.Lerp(origColor, Color.red, transition / animLength);
+			if (_manager._ringsReady) {
+				foreach(MeshRenderer ringRenderer in _manager.rings.GetComponentsInChildren<MeshRenderer>()) {
+					ringRenderer.material.color = Color.Lerp(origColorRings, Color.red, transition / animLength);
+				}
+			}
 			
 			if (!_manager.audio.isPlaying) {
 				_manager._state = new BossMusicManagerState(_manager);	
