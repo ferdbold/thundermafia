@@ -1,17 +1,22 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/EnemySpawner.cs">
     <Files>
-      <File FileName="Assets/Scripts/GameManager.cs" Line="82" Column="4" />
-      <File FileName="Assets/Scripts/MusicManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameManager.cs" Line="48" Column="6" />
+      <File FileName="Assets/Scripts/MusicManager.cs" Line="103" Column="26" />
       <File FileName="Assets/Scripts/LifeWidget.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Deplacement.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Player.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/GoalWidget.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/EnemyIA.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/EnemyIA.cs" Line="34" Column="33" />
       <File FileName="Assets/Scripts/CameraControl.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/HexManager.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/HexBehaviour.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/RingBehaviour.cs" Line="12" Column="3" />
+      <File FileName="Assets/Scripts/ShootingPlayer.cs" Line="59" Column="31" />
+      <File FileName="Assets/Scripts/ScoreWidget.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/EnemySpawner.cs" Line="54" Column="40" />
+      <File FileName="Assets/Scripts/GameInfo.cs" Line="21" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
